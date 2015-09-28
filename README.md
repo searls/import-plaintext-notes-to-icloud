@@ -21,4 +21,6 @@ all of your notes in ".txt" files.
 bundle exec script/create_notes_in_icloud.rb "foo@me.com" "myPassword" "/Users/foo/my/notes"
 ```
 
+## Troubleshooting
 
+The script will fail if a push notification comes in while you're on the other site (for example a reminders.app or calendar.app notification along the top of the window), because it will block the new note button. If this is a hangup for you, you can figure out how to search for the Close link and click it before each iteration.

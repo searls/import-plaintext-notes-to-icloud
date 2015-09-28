@@ -18,7 +18,7 @@ password = ARGV[1]
 directory_path = ARGV[2]
 
 # notes fetching
-notes = ListFilesByMtime.call(directory_path)
+notes = ListFilesByMtime.call(directory_path).reject(&:empty?)
 
 # logging in
 visit "https://icloud.com"
@@ -29,21 +29,22 @@ find('input[aria-label="Password"]').send_keys(password + "\n")
 sleep 2
 find('a[href="#notes"]').click
 
-notes.each do |note|
-  sleep 2
+notes.each_with_index do |note, i|
+  sleep 1
   within_frame('notes') do
-    puts "Creating a new note"
+    puts "\n\n----------------\nCreating note ##{i + 1}"
     find('.newnote-button').click
 
     puts "Writing out note contents:\n\n#{note}"
-    within_frame(find('.mceIframeContainer iframe')) do
-      find('body').send_keys(note)
+    within_frame(find('.mceIframeContainer iframe')) do |frame|
+      frame.execute_script("window.parent.tinymce.editors[0].setContent(\"#{note.gsub('"',%q(\\\")).gsub(/\n/,'<br/>')}\")")
+      find('body').send_keys(' ')
+      find('body').native.send_keys(:backspace)
     end
-    puts "Note finished"
   end
 end
 
 # let icloud be the slowest syncing service we all know and love
 puts "Finishing Sync. This is highly technical"
-sleep 200
+sleep 20
 
