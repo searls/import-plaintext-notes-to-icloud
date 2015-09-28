@@ -19,8 +19,6 @@ directory_path = ARGV[2]
 
 # notes fetching
 notes = ListFilesByMtime.call(directory_path)
-# DELETE ME WHEN GO TIME
-notes = [notes.first]
 
 # logging in
 visit "https://icloud.com"
@@ -32,17 +30,20 @@ sleep 2
 find('a[href="#notes"]').click
 
 notes.each do |note|
-  #create a note
   sleep 2
   within_frame('notes') do
+    puts "Creating a new note"
     find('.newnote-button').click
 
-    #paste in the note
+    puts "Writing out note contents:\n\n#{note}"
     within_frame(find('.mceIframeContainer iframe')) do
       find('body').send_keys(note)
     end
+    puts "Note finished"
   end
-
 end
 
-binding.pry
+# let icloud be the slowest syncing service we all know and love
+puts "Finishing Sync. This is highly technical"
+sleep 200
+
