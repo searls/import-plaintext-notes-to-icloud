@@ -30,7 +30,7 @@ sleep 2
 find('a[href="#notes"]').click
 
 notes.each_with_index do |note, i|
-  sleep 1
+  sleep 2
   within_frame('notes') do
     puts "\n\n----------------\nCreating note ##{i + 1}"
     find('.newnote-button').click
