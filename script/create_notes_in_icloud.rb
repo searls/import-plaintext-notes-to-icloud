@@ -38,8 +38,10 @@ notes.each_with_index do |note, i|
     puts "Writing out note contents:\n\n#{note}"
     within_frame(find('.mceIframeContainer iframe')) do |frame|
       frame.execute_script("window.parent.tinymce.editors[0].setContent(\"#{note.gsub('"',%q(\\\")).gsub(/\n/,'<br/>')}\")")
-      find('body').send_keys(' ')
-      find('body').native.send_keys(:backspace)
+      frame.execute_script("window.parent.tinyMCE.triggerSave()")
+      find('body').send_keys('   ')
+      sleep 1
+      find('body').native.send_keys(:backspace, :backspace, :backspace)
     end
   end
 end
